@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-
-import "./App.css";
+import React from "react";
 import SimpleTable from "./components/SimpleTable";
 
 interface MockData {
@@ -814,91 +812,92 @@ const mockData2 = [
   },
 ];
 
-const mockData1 = [
-  {
-    id: 1,
-    date_time: "2020-12-15 23:30:44",
-    first_name: "Loutitia",
-    last_name: "Tomaszewicz",
-    email: "ltomaszewicz0@constantcontact.com",
-    gender: "Bigender",
-  },
-  {
-    id: 2,
-    date_time: "2021-09-25 04:48:23",
-    first_name: "Mora",
-    last_name: "Burgyn",
-    email: "mburgyn1@time.com",
-    gender: "Female",
-  },
-  {
-    id: 3,
-    date_time: "2021-03-08 11:11:07",
-    first_name: "Felice",
-    last_name: "Sorby",
-    email: "fsorby2@princeton.edu",
-    gender: "Genderqueer",
-  },
-  {
-    id: 4,
-    date_time: "2021-08-25 14:32:40",
-    first_name: "Catie",
-    last_name: "Swatridge",
-    email: "cswatridge3@bluehost.com",
-    gender: "Genderfluid",
-  },
-  {
-    id: 5,
-    date_time: "2021-01-30 11:47:45",
-    first_name: "Conrade",
-    last_name: "Connichie",
-    email: "cconnichie4@nydailynews.com",
-    gender: "Genderqueer",
-  },
-  {
-    id: 6,
-    date_time: "2021-07-22 15:44:41",
-    first_name: "Kristen",
-    last_name: "Buckney",
-    email: "kbuckney5@ucoz.ru",
-    gender: "Male",
-  },
-  {
-    id: 7,
-    date_time: "2021-10-20 22:41:11",
-    first_name: "Celestina",
-    last_name: "Warricker",
-    email: "cwarricker6@washington.edu",
-    gender: "Female",
-  },
-  {
-    id: 8,
-    date_time: "2021-02-01 23:50:16",
-    first_name: "Tawsha",
-    last_name: "Pehrsson",
-    email: "tpehrsson7@amazon.co.jp",
-    gender: "Non-binary",
-  },
-  {
-    id: 9,
-    date_time: "2021-11-23 00:41:03",
-    first_name: "Eyde",
-    last_name: "Lucas",
-    email: "elucas8@weebly.com",
-    gender: "Agender",
-  },
-  {
-    id: 10,
-    date_time: "2021-11-24 01:35:44",
-    first_name: "Mora",
-    last_name: "Clayworth",
-    email: "mclayworth9@mapy.cz",
-    gender: "Genderfluid",
-  },
-];
-const mockData: MockData[] = require("./MOCK_DATA.json");
+// const mockData1 = [
+//   {
+//     id: 1,
+//     date_time: "2020-12-15 23:30:44",
+//     first_name: "Loutitia",
+//     last_name: "Tomaszewicz",
+//     email: "ltomaszewicz0@constantcontact.com",
+//     gender: "Bigender",
+//   },
+//   {
+//     id: 2,
+//     date_time: "2021-09-25 04:48:23",
+//     first_name: "Mora",
+//     last_name: "Burgyn",
+//     email: "mburgyn1@time.com",
+//     gender: "Female",
+//   },
+//   {
+//     id: 3,
+//     date_time: "2021-03-08 11:11:07",
+//     first_name: "Felice",
+//     last_name: "Sorby",
+//     email: "fsorby2@princeton.edu",
+//     gender: "Genderqueer",
+//   },
+//   {
+//     id: 4,
+//     date_time: "2021-08-25 14:32:40",
+//     first_name: "Catie",
+//     last_name: "Swatridge",
+//     email: "cswatridge3@bluehost.com",
+//     gender: "Genderfluid",
+//   },
+//   {
+//     id: 5,
+//     date_time: "2021-01-30 11:47:45",
+//     first_name: "Conrade",
+//     last_name: "Connichie",
+//     email: "cconnichie4@nydailynews.com",
+//     gender: "Genderqueer",
+//   },
+//   {
+//     id: 6,
+//     date_time: "2021-07-22 15:44:41",
+//     first_name: "Kristen",
+//     last_name: "Buckney",
+//     email: "kbuckney5@ucoz.ru",
+//     gender: "Male",
+//   },
+//   {
+//     id: 7,
+//     date_time: "2021-10-20 22:41:11",
+//     first_name: "Celestina",
+//     last_name: "Warricker",
+//     email: "cwarricker6@washington.edu",
+//     gender: "Female",
+//   },
+//   {
+//     id: 8,
+//     date_time: "2021-02-01 23:50:16",
+//     first_name: "Tawsha",
+//     last_name: "Pehrsson",
+//     email: "tpehrsson7@amazon.co.jp",
+//     gender: "Non-binary",
+//   },
+//   {
+//     id: 9,
+//     date_time: "2021-11-23 00:41:03",
+//     first_name: "Eyde",
+//     last_name: "Lucas",
+//     email: "elucas8@weebly.com",
+//     gender: "Agender",
+//   },
+//   {
+//     id: 10,
+//     date_time: "2021-11-24 01:35:44",
+//     first_name: "Mora",
+//     last_name: "Clayworth",
+//     email: "mclayworth9@mapy.cz",
+//     gender: "Genderfluid",
+//   },
+// ];
+// const mockData: MockData[] = require("./MOCK_DATA.json");
+// const mockData: MockData[]
 
 function App() {
-  return <SimpleTable json_data={mockData} />;
+  return <SimpleTable json_data={mockData2} />;
 }
 export default App;
