@@ -2,9 +2,36 @@ import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 import { Icon } from "@iconify/react";
 import styles from "./SimpleTable.module.css";
+import TableRow from "../TableRow";
 
-const SimpleTable = ({ json_data }: any) => {
-  const [data, setData] = useState(json_data);
+type Props = {
+  json_data: object[];
+  config?: object;
+};
+const defaultConfig = {};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "SET_DATA":
+      return action.payload;
+    case "UPDATE_ROW":
+      const { _uuid, data } = action.payload;
+      return state.map((row) => {
+        if (row._uuid === _uuid) {
+          return { ...row, ...data };
+        }
+        return row;
+      });
+
+    case "DELETE_ROW":
+      return state.filter((row) => row._uuid !== action._uuid);
+    default:
+      return state;
+  }
+}
+const SimpleTable = ({ json_data, config = defaultConfig }: Props) => {
+  const [data, dispatch] = React.useReducer(reducer, json_data);
+  // const [data, setData] = useState(json_data);
   const [trackHeaderOrder, setTrackHeaderOrder] = useState<
     { column_name: string; order: "asc" | "desc" }[]
   >([]);
@@ -32,10 +59,27 @@ const SimpleTable = ({ json_data }: any) => {
       sortByType(newTrackHeaderOrder, column);
     }
   };
-
-  const outputHeaders = (dataObject: object) => {
+  // add Action column at the end
+  // Filter _ properties
+  // Add pagination
+  const outputHeaders = (dataObject: any) => {
     const keys = Object.keys(dataObject);
-    return keys.map((key) => {
+    // filter out _ properties
+    const filteredKeys = keys.filter((key) => key[0] !== "_");
+    // add Action column
+    // add Row No. column
+    const newKeys = ["#", ...filteredKeys, "Action"];
+
+    return newKeys.map((key) => {
+      if (key === "#") {
+        return (
+          <th scope="col" key={uuid()}>
+            <div className={styles["t-header-row"]}>
+              <p>{key}</p>
+            </div>
+          </th>
+        );
+      }
       return (
         <th scope="col" key={uuid()} onClick={sortData} data-column={key}>
           <div className={styles["t-header"]}>
@@ -46,16 +90,16 @@ const SimpleTable = ({ json_data }: any) => {
       );
     });
   };
-
-  const outputDataRows = (dataArray: object[]) => {
+  // if _color, _bg is present, set bg to that color
+  const outputDataRows = (dataArray: any) => {
     return dataArray.map((dataObject: any) => {
-      const keys = Object.keys(dataObject);
       return (
-        <tr key={uuid()}>
-          {keys.map((key) => {
-            return <td key={uuid()}>{dataObject[key]}</td>;
-          })}
-        </tr>
+        <TableRow
+          RowData={dataObject}
+          editable={false}
+          key={uuid()}
+          dispatch={dispatch}
+        />
       );
     });
   };
@@ -78,18 +122,36 @@ const SimpleTable = ({ json_data }: any) => {
     ) {
       case "asc":
         if (typeof data[0][column] === "string") {
-          setData([...sortByString(data, column, "desc")]);
+          dispatch({
+            type: "SET_DATA",
+            payload: [...sortByString(data, column, "desc")],
+          });
+          // setData([...sortByString(data, column, "desc")]);
         } else {
-          setData([...sortByNumber(data, column, "desc")]);
+          dispatch({
+            type: "SET_DATA",
+            payload: [...sortByNumber(data, column, "desc")],
+          });
+
+          // setData([...sortByNumber(data, column, "desc")]);
           // console.log("in asc", [...sortByNumber(data, column, "desc")]);
         }
         break;
       case "desc":
         if (typeof data[0][column] === "string") {
-          setData([...sortByString(data, column, "asc")]);
+          dispatch({
+            type: "SET_DATA",
+            payload: [...sortByString(data, column, "asc")],
+          });
+
+          // setData([...sortByString(data, column, "asc")]);
           // if column is a number, sort in descending order using - operator
         } else {
-          setData([...sortByNumber(data, column, "asc")]);
+          dispatch({
+            type: "SET_DATA",
+            payload: [...sortByNumber(data, column, "asc")],
+          });
+          // setData([...sortByNumber(data, column, "asc")]);
         }
         break;
 
