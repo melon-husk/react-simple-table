@@ -3,13 +3,24 @@ import { v4 as uuid } from "uuid";
 import { Icon } from "@iconify/react";
 import styles from "./SimpleTable.module.css";
 import TableRow from "../TableRow";
+import TableHeader from "../TableHeader";
 
 type Props = {
   json_data: object[];
   config?: object;
 };
 const defaultConfig = {};
-
+//  {
+//   "_uuid": "0b1dbdf6-9a26-46c1-89d9-a9d4e10a9ccf",
+//   "_id": 99,
+//   "_bg": "#fc468c",
+//   "_color": "#f7995d",
+//   "first_name": "Jobey",
+//   "last_name": "Sarjent",
+//   "date": "2021-08-06",
+//   "email": "jsarjent2q@icio.us",
+//   "gender": "Bigender"
+// }
 function reducer(state, action) {
   switch (action.type) {
     case "SET_DATA":
@@ -25,12 +36,19 @@ function reducer(state, action) {
 
     case "DELETE_ROW":
       return state.filter((row) => row._uuid !== action._uuid);
+
     default:
       return state;
   }
 }
 const SimpleTable = ({ json_data, config = defaultConfig }: Props) => {
   const [data, dispatch] = React.useReducer(reducer, json_data);
+  const [filterObject, setFilterObject] = useState({
+    column: "",
+    value: "",
+    isFiltering: false,
+  });
+
   // const [data, setData] = useState(json_data);
   const [trackHeaderOrder, setTrackHeaderOrder] = useState<
     { column_name: string; order: "asc" | "desc" }[]
@@ -103,13 +121,38 @@ const SimpleTable = ({ json_data, config = defaultConfig }: Props) => {
       );
     });
   };
-
+  const filteredDataRows = (dataArray: any) => {
+    // if filterObject is not hydrated, return all data
+    if (!filterObject.column || !filterObject.value) {
+      return outputDataRows(dataArray);
+    }
+    console.log({ filterObject });
+    const filteredDataArray = dataArray.filter((dataObject: any) => {
+      return dataObject[filterObject.column]
+        .toString()
+        .toLowerCase()
+        .includes(filterObject.value.toLowerCase());
+    });
+    console.log(filteredDataArray);
+    return outputDataRows(filteredDataArray);
+  };
   return (
     <table>
       <thead>
-        <tr>{outputHeaders(data[0])}</tr>
+        <tr>
+          <TableHeader
+            dataObject={data[0]}
+            sortFunction={sortData}
+            filterObject={filterObject}
+            setFilterObject={setFilterObject}
+          />
+        </tr>
       </thead>
-      <tbody>{outputDataRows(data)}</tbody>
+      <tbody>
+        {filterObject.isFiltering
+          ? filteredDataRows(data)
+          : outputDataRows(data)}
+      </tbody>
     </table>
   );
 
