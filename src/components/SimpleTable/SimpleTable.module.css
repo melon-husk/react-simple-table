@@ -1,15 +1,4 @@
-.t-header-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-.t-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
 .action {
   display: flex;
   align-items: center;
